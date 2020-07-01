@@ -1,0 +1,273 @@
+<app-menu></app-menu>
+<div class="row mx-3 mb-3">
+    <div class="col">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <div class="row">
+                    <div class="text-center col-md-3 my-auto">
+                        <h2>Estadísticas</h2>
+                    </div>
+                    <div class="col-md-3"><label>Desde: </label><input class="form-control" type="date"
+                            [(ngModel)]="fill.start_date" name="start_date"></div>
+                    <div class="col-md-3"><label>Hasta: </label><input class="form-control" type="date"
+                            [(ngModel)]="fill.end_date" name="end_date"></div>
+                    <div class="col-md-2 text-center  my-auto">
+                        <button class="btn btn-primary mr-2" (click)="filtrar()"><i class="fas fa-search"></i>
+                            Buscar</button>
+                        <button class="btn btn-secondary" (click)="refresh()"><i class="fas fa-redo-alt"></i> Ver
+                            todos</button>
+                    </div>
+                    <div class="col-md-1 my-auto">
+                        <button class="btn btn-success" (click)='convert()'><i class="fas fa-file-excel"></i>
+                            Excel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr style="color: black; width: 70%;">
+<div class="row mx-3 my-2 d-flex align-items-center">
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header bg-dark text-white"></div>
+            <div class="card-body">
+                <table class="table table-striped table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <td class="text-center bg-dark text-white" colspan="3">Órdenes por estatus</td>
+                        </tr>
+                        <tr>
+                            <td>Estatus</td>
+                            <td class="text-center">Cantidad</td>
+                            <td class="text-center">Porcentaje</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let countByStatus of count_by_status; index as i">
+                            <td>{{countByStatus.tipo_orden}}</td>
+                            <td class="text-center">{{countByStatus.cantidad}}</td>
+                            <td class="text-center">{{percent_by_status[i] | number:'1.1-2'}}%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="card chart">
+            <div class="card-header bg-dark"></div>
+            <div class="card-body">
+                <canvas id="canvas1"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<hr style="color: black; width: 70%;">
+<div class="row mx-3 my-3  align-items-center">
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header bg-dark text-white"></div>
+            <div class="card-body">
+                <table class="table table-striped table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <td class="text-center bg-dark text-white" colspan="3">Órdenes por tipo</td>
+                        </tr>
+                        <tr>
+                            <td>Tipo</td>
+                            <td class="text-center">Cantidad</td>
+                            <td class="text-center">Porcentaje</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let countByTipo of count_by_tipo; index as i">
+                            <td>{{countByTipo.descripcion}}</td>
+                            <td class="text-center">{{countByTipo.cantidad}}</td>
+                            <td class="text-center">{{percent_by_tipo[i] | number:'1.1-2'}}%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="card chart">
+            <div class="card-header bg-dark"></div>
+            <div class="card-body">
+                <canvas id="canvas2"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<hr style="color: black; width: 70%;">
+<div class="row mx-3 my-3  align-items-center">
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header bg-dark text-white"></div>
+            <div class="card-body">
+                <table class="table table-striped table-hover table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <td class="text-center bg-dark text-white" colspan="3">Órdenes por técnico y tipo</td>
+                        </tr>
+                        <tr>
+                            <td>Técnico</td>
+                            <td>Tipo</td>
+                            <td class="text-center">Cantidad</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let countByTipoTec of count_by_tipo_tec">
+                            <td>{{countByTipoTec.nombre}}</td>
+                            <td>{{countByTipoTec.tipo_orden}}</td>
+                            <td class="text-center">{{countByTipoTec.cantidad}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="card chart">
+            <div class="card-header bg-dark"></div>
+            <div class="card-body">
+                <canvas id="canvas3"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<hr style="color: black; width: 70%;">
+<div class="row mx-3 my-3 align-items-center">
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header bg-dark text-white"></div>
+            <div class="card-body">
+                <table class="table table-striped table-hover table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <td class="text-center bg-dark text-white" colspan="3">Órdenes por técnico y estatus</td>
+                        </tr>
+                        <tr>
+                            <td>Técnico</td>
+                            <td>Estatus</td>
+                            <td class="text-center">Cantidad</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let countByStatusTec of count_by_status_tec">
+                            <td>{{countByStatusTec.nombre}}</td>
+                            <td>{{countByStatusTec.estatus_orden}}</td>
+                            <td class="text-center">{{countByStatusTec.cantidad}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="card chart">
+            <div class="card-header bg-dark"></div>
+            <div class="card-body">
+                <canvas id="canvas4"></canvas>
+            </div>
+        </div>
+    </div> 
+</div>
+<hr style="color: black; width: 70%;">
+<div class="row mx-3 my-3">
+    <div class="col-md-2 offset-md-5">
+        <div class="card">
+            <div class="card-header bg-dark text-center text-white">
+                Tiempo promedio de atención
+            </div>
+            <div class="card-body">
+                <h1 class="text-center" style="font-size: 42px; color: dodgerblue;">{{avg.promedio  | number: '1.1-2'}}</h1>
+                <h4 class="text-center">días</h4>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mx-3 my-3">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-dark text-white"></div>
+            <div class="card-body">
+                <table class="table table-striped table-hover table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <td class="text-center bg-dark text-white" colspan="3">Órdenes ejecutadas el mismo
+                                día de asignación</td>
+                        </tr>
+                        <tr>
+                            <td>ID</td>
+                            <td>Técnico</td>
+                            <td class="text-center">Cantidad</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let countSdTec of count_sd_tec">
+                            <td>{{countSdTec.id}}</td>
+                            <td>{{countSdTec.nombre}}</td>
+                            <td class="text-center">{{countSdTec.cantidad}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-dark text-white"></div>
+            <div class="card-body">
+                <table class="table table-striped table-hover table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <td class="text-center bg-dark text-white" colspan="3">Órdenes ejecutadas con 1 día
+                                de retraso</td>
+                        </tr>
+                        <tr>
+                            <td>ID</td>
+                            <td>Técnico</td>
+                            <td class="text-center">Cantidad</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let count2dTec of count_2d_tec">
+                            <td>{{count2dTec.id}}</td>
+                            <td>{{count2dTec.nombre}}</td>
+                            <td class="text-center">{{count2dTec.cantidad}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-dark text-white"></div>
+            <div class="card-body">
+                <table class="table table-striped table-hover table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <td class="text-center bg-dark text-white" colspan="3">Órdenes ejecutadas con 2 o
+                                más días de retraso</td>
+                        </tr>
+                        <tr>
+                            <td>ID</td>
+                            <td>Técnico</td>
+                            <td class="text-center">Cantidad</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let count3dTec of count_3d_tec">
+                            <td>{{count3dTec.id}}</td>
+                            <td>{{count3dTec.nombre}}</td>
+                            <td class="text-center">{{count3dTec.cantidad}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,84 @@
+<app-menu></app-menu>
+<div class="container mb-5">
+    <div class="card text-left">
+        <div class="card-header bg-dark text-white">
+            <button class="btn btn-primary d-inline mr-2" (click)=goB()>Atras</button><h4 class="d-inline">Editar Orden de Servicio</h4>
+        </div>
+        <div class="card-body">
+            <form>
+                <div class="row my-2">
+                    <div class="col-md-6 text-center">
+                        <label for="calendario">Fecha de Asignación</label> <br>
+                        <input class="form-control" id="calendario" type="date" name="fecha_asig"
+                            [(ngModel)]="ordenServicio.fecha_asig">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="">Tipo de Orden</label>
+                        <select class="form-control" id="" name="idtipo_orden" [(ngModel)]="ordenServicio.idtipo_orden">
+                            <option *ngFor="let tipoOrden of tipoOrdenes" [ngValue]="tipoOrden.idtipo_orden">
+                                {{tipoOrden.descripcion}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col-md-8">
+                        <label for="exampleFormControlInput1">Cliente</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1"
+                            placeholder="Nombres del Clientes" name="nombres_cliente"
+                            [(ngModel)]="ordenServicio.nombres_cliente">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="tecnicos">Técnico Asignado</label>
+                        <select class="form-control" id="tecnicos" name="idusuario"
+                            [(ngModel)]="ordenServicio.id">
+                            <option *ngFor="let usuario of usuarios" [ngValue]="usuario.id">
+                                {{usuario.nombre}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col-md-12">
+                        <label for="exampleFormControlInput1">Dirección</label>
+                        <input type="text" class="form-control" placeholder="Dirección"
+                            [(ngModel)]="ordenServicio.direccion_cliente" name="direccion_cliente">
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col-md-4">
+                        <label for="">Teléfono 1</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="04144122563"
+                            [(ngModel)]="ordenServicio.telefono_cliente" name="telefono_cliente">
+                    </div>
+                    <div class="col-md-4 offset-md-4">
+                        <label for="">PPPoE User</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1"
+                            placeholder="Usuario PPPoE" [(ngModel)]="ordenServicio.ppp_user" name="ppp_user">
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col-md-4">
+                        <label for="">Teléfono 2</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="04144122563"
+                            [(ngModel)]="ordenServicio.movil_cliente" name="movil_cliente">
+                    </div>
+                    <div class="col-md-4 offset-md-4">
+                        <label for="">PPPoE Password</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Clave PPPoE"
+                            [(ngModel)]="ordenServicio.ppp_pass" name="ppp_pass">
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <label for="te">Requerimiento</label>
+                    <textarea class="form-control" name="" id="te" rows="2" name="diagnostico_inicial"
+                        [(ngModel)]="ordenServicio.diagnostico_inicial"></textarea>
+                </div>
+                
+            </form>
+        </div>
+        <div class="card-footer text-center">
+                <button class="btn btn-primary" (click)="editOrden()">Guardar</button>
+        </div>
+    </div>
+</div>

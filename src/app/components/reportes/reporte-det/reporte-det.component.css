@@ -1,0 +1,11 @@
+.chart-container {
+    position:relative;
+}
+
+/* [class^=col] {
+    display: flex;
+} */
+
+/* [class^=col] div {
+    flex-grow: 1
+} */

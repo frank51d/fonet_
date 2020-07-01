@@ -1,0 +1,156 @@
+<app-menu></app-menu>
+<div class="container mb-5">
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card text-left mb-3">
+                <form>
+                    <div class="card-header bg-dark text-white">
+                        Obtener Cliente
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Ingrese el código Mkw del cliente para obtener sus datos..</p>
+                        <input type="text" class="form-control" id="exampleFormControlInput1" name="idcliente"
+                            [(ngModel)]="postData.idcliente" placeholder="Ej. 1713">
+                    </div>
+                    <div class="card-footer text-center">
+                        <button class="btn btn-primary text-center" (click)="sendId()">Obtener Mkw</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-left mb-3">
+
+                <div class="card-header bg-dark text-white">
+                    Plataforma e Infraestrutura
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Seleccione uno de los nodos existentes...</p>
+                    <select name="idplataforma" id="idplataforma" class="form-control" [(ngModel)]="plat.idplataforma">
+                        <option *ngFor="let plataforma of plataformas" [ngValue]="plataforma.idplataforma">
+                            {{plataforma.descripcion}}
+                        </option>
+                    </select>
+                </div>
+                <div class="card-footer text-center">
+                    <button type="submit" class="btn btn-primary" (click)="getPlataforma()">Traer Info</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card text-left">
+        <div class="card-header bg-dark text-white">
+            Orden de Servicio
+        </div>
+        <div class="card-body">
+            <form name="signup_form" (ngSubmit)="fs.form.valid && crearOrden()" #fs="ngForm" id="form" name="form" novalidate>
+                <div class="row my-2">
+                    <div class="col-md-6">
+                        <label for="today">Fecha de Asignación *</label> <br>
+                        <input class="form-control" id="today" type="date" name="fecha_asig"
+                            [(ngModel)]="ordenServicio.fecha_asig" size="2" style="width: 200px;" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="">Tipo de Orden *</label>
+                        <select class="form-control" type="text" id="idtipo_orden" name="idtipo_orden"
+                            [(ngModel)]="ordenServicio.idtipo_orden" #idtipo_orden="ngModel"
+                            [ngClass]="{'is-invalid': fs.submitted && ordenServicio.idtipo_orden==0}" required>
+                            <option *ngFor="let tipoOrden of tipoOrdenes" [ngValue]="tipoOrden.idtipo_orden">
+                                {{tipoOrden.descripcion}}
+                            </option>
+                        </select>
+                        <div *ngIf="fs.submitted && ordenServicio.idtipo_orden==0" class="invalid-feeback">
+                            <div style="color:red">
+                                Se debe escoger un tipo de orden.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col-md-8">
+                        <label for="exampleFormControlInput1">Cliente *</label>
+                        <input type="text" class="form-control" name="nombres_cliente" id="nombres_cliente"
+                            [(ngModel)]="ordenServicio.nombres_cliente" #nombres_cliente="ngModel" required
+                            placeholder="Razón Social o Nombres del Cliente"
+                            [ngClass]="{'is-invalid': fs.submitted && nombres_cliente.invalid}">
+                        <div *ngIf="fs.submitted && nombres_cliente.invalid" class="invalid-feeback">
+                            <div *ngIf="nombres_cliente.errors.required" style="color:red">
+                                Se necesita el nombre o razon social del cliente.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="tecnicos">Técnico Asignado</label>
+                        <select type="text" class="form-control" name="id" id="id"
+                            [(ngModel)]="ordenServicio.id" #idusuario="ngModel">
+                            <option *ngFor="let usuario of usuarios" [ngValue]="usuario.id">
+                                {{usuario.nombre}}
+                            </option>
+                        </select>                       
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col-md-12">
+                        <label for="exampleFormControlInput1">Dirección *</label>
+                        <input type="text" class="form-control" name="direccion_cliente" id="direccion_cliente"
+                            placeholder="Dirección donde se encuentra instalado el servicio"
+                            [(ngModel)]="ordenServicio.direccion_cliente" #direccion_cliente="ngModel" required
+                            [ngClass]="{'is-invalid': fs.submitted && direccion_cliente.invalid}">
+                        <div *ngIf="fs.submitted && direccion_cliente.invalid" class="invalid-feeback">
+                            <div *ngIf="direccion_cliente.errors.required" style="color:red">
+                                Se necesita la direccion donde se amerita el soporte.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col-md-4">
+                        <label for="">Teléfono 1</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="04144122563"
+                            [(ngModel)]="ordenServicio.telefono_cliente" name="telefono_cliente">
+                    </div>
+                    <div class="col-md-4 offset-md-4">
+                        <label for="">PPPoE User</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1"
+                            placeholder="Usuario PPPoE" [(ngModel)]="ordenServicio.ppp_user" name="ppp_user">
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col-md-4">
+                        <label for="">Teléfono 2</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="04144122563"
+                            [(ngModel)]="ordenServicio.movil_cliente" name="movil_cliente">
+                    </div>
+                    <div class="col-md-4 offset-md-4">
+                        <label for="">PPPoE Password</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Clave PPPoE"
+                            [(ngModel)]="ordenServicio.ppp_pass" name="ppp_pass">
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="col-md-12">
+                        <label for="te">Requerimiento *</label>
+                        <textarea class="form-control" name="" id="te" rows="2" cols="3" name="diagnostico_inicial"
+                            id="diagnostico_inicial" [(ngModel)]="ordenServicio.diagnostico_inicial"
+                            #diagnostico_inicial="ngModel" required
+                            [ngClass]="{'is-invalid': fs.submitted && diagnostico_inicial.invalid}"></textarea>
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="col-md-12">
+                        <label for="te">Comentarios</label>
+                        <textarea class="form-control" name="" id="te" rows="2" cols="3" name="comentarios"
+                            id="comentarios" [(ngModel)]="ordenServicio.comentarios"
+                            #comentarios="ngModel"></textarea>
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <button type="submit" class="btn btn-primary">Generar Orden</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

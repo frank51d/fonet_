@@ -1,0 +1,33 @@
+<app-menu></app-menu>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    Conexión Mikrowsp
+                </div>
+                <div class="card-body">
+                    <label>URL del Servidor</label>
+                    <input class="form-control" type="text" placeholder="URL del Servidor" [(ngModel)]="URL"> <br>
+                    <label>Token de Conexión</label>
+                    <input class="form-control" type="text" placeholder="" [(ngModel)]="token"> <br>
+                    <button class="btn btn-primary btn-block">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    Generar Backup
+                </div>
+                <div class="card-body">
+                    <label>Descargar respaldo de la base de datos</label>
+                    <a href="http://localhost:3000/backup/backup_fonet_app.sql" target="_blank"><button class="btn btn-primary ml-4">Descargar</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

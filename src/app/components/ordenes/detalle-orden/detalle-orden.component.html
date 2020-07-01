@@ -1,0 +1,78 @@
+<app-menu></app-menu>
+<div class="container">
+    <div class="card mb-5">
+        <div class="card-header bg-dark text-white">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <button class="btn btn-primary d-inline mr-2" (click)=goB()>Atras</button>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="text-center"><b>Tipo de Orden: </b><span class="badge mt-2"
+                            [ngClass]="{'badge-primary': orden.tipo_orden == 'Soporte', 'badge-warning': orden.tipo_orden == 'Inspección', 'badge-info': orden.tipo_orden == 'Instalación'}">{{orden.tipo_orden}}</span>
+                    </h5>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="text-center"><b>Fecha programada: </b><span
+                            class="badge badge-light">{{orden.fecha_asig | date:'dd/MM/yyyy'}}</span></h5>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="text-center"><b>Estatus: </b><span class="badge mt-2"
+                            [ngClass]="{'badge-primary': orden.estatus == 'ASIGNADA', 'badge-danger': orden.estatus == 'CERRADA', 'badge-info': orden.estatus == 'EN PROCESO'}">{{orden.estatus}}</span>
+                    </h5>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="card-body">
+            <h5 class="card-title text-center">Datos de la Orden</h5>
+            <hr>
+            <label for=""><b>Nombres o Razón Social del Cliente</b></label>
+            <input type="text" class="form-control" id="nombre" [(ngModel)]="orden.nombres_cliente" readonly>
+            <div class="my-2">
+                <label for="" class="mt-2"><b>Dirección</b></label><a href="https://maps.google.com/?q={{orden.coordenada}}" target="_blank"><button class="btn btn-primary ml-2 mb-2 float-center"><i class="fa fa-map-marker"></i>  ¿Como llegar?</button></a>
+                <textarea type="text" class="form-control" id="nombre" [(ngModel)]="orden.direccion_cliente"
+                    readonly></textarea>
+            </div>
+            <label for="" class="mt-2" col="6"><b>Teléfono 1</b></label>
+            <input type="text" class="form-control" id="nombre" [(ngModel)]="orden.telefono_cliente" readonly>
+            <label for="" class="mt-2" col="6"><b>Teléfono 2</b></label>
+            <input type="text" class="form-control" id="nombre" [(ngModel)]="orden.movil_cliente" readonly>
+            <label for="" class="mt-2"><b>PPPoE User</b></label>
+            <input type="text" class="form-control" id="nombre" [(ngModel)]="orden.ppp_user" readonly>
+            <label for="" class="mt-2"><b>PPPoE Pass</b></label>
+            <input type="text" class="form-control" id="nombre" [(ngModel)]="orden.ppp_pass" readonly>
+            <label for="" class="mt-2"><b>Requerimiento</b></label>
+            <textarea type="text" class="form-control" id="nombre" [(ngModel)]="orden.diagnostico_inicial"
+                readonly></textarea>
+        </div>
+        <div class="card-footer text-center">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#ModalConfirmar">Iniciar Orden</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalConfirmar" tabindex="-1" role="dialog" aria-labelledby="ModalConfirmarTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content text-center">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalConfirmarTitle">Confirmación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ¿Estas seguro que quieres iniciar esta orden de servicio?<br><br>
+                Una vez iniciada, el tiempo de ejecución comenzará a correr.<br><br>
+                Recuerda y asegurate de finalizar la orden una vez hayas terminando para registrar la hora de
+                finalización.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Atras</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                    [routerLink]="['/ordenes/doin', orden.idorden]" (click)="iniciarOrden()">Si, iniciar!</button>
+            </div>
+        </div>
+    </div>
+</div>

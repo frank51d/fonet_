@@ -1,0 +1,88 @@
+<app-menu></app-menu>
+
+<div class="container">
+    <h1>¡Bienvenido {{current}}!</h1>
+
+    <div class="row">
+        <div class="col-md-3 col-6 mb-2">
+            <div class="card text-white m-auto" style="max-width: 18rem;">
+                <div class="card-header text-center bg-primary">Órdenes Asignadas</div>
+                <div class="card-body text-center">
+                    <p class="card-text text-dark" style="font-size: 65px;">{{abiertas}}</p>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="authority === 'admin'" class="col-md-3 col-6 mb-2">
+            <div class="card text-white m-auto" style="max-width: 18rem;">
+                <div class="card-header text-center bg-dark">Órdenes Sin Asignar</div>
+                <div class="card-body text-center">
+                    <p class="card-text text-dark" style="font-size: 65px;">{{no_asignada}}</p>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="authority === 'admin'" class="col-md-3 mb-2">
+            <div class="card text-white m-auto" style="max-width: 18rem;">
+                <div class="card-header text-center bg-info">Órdenes en Proceso</div>
+                <div class="card-body text-center">
+                    <p class="card-text text-dark" style="font-size: 65px;">{{en_proceso}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6 mb-2">
+            <div class="card text-white m-auto" style="max-width: 18rem;">
+                <div class="card-header text-center bg-danger">Ordenes Ejecutadas</div>
+                <div class="card-body text-center">
+                    <p class="card-text text-dark" style="font-size: 65px;">{{cerradas}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row mb-5" [ngClass]="{'d-none':authority=='user'}">
+        <div class="col-md-6">
+            <div class="card chart">
+                <div class="chart-container">
+                    <canvas id="canvas1"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="chart-container">
+                    <canvas id="canvas2"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-5" [ngClass]="{'d-none':authority=='admin'}">
+        <div class="col-md-6">
+            <div class="card chart">
+                <div class="chart-container">
+                    <canvas id="canvas3"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="chart-container">
+                    <canvas id="canvas4"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- <div *ngIf="info.token; else loggedOut">
+        <div class="container">
+            <p><strong>Tu nombre de usuario: </strong>{{ info.nombreUsuario}}</p>
+            <p><strong>Este es el token: </strong>{{ info.token}}</p>
+            <p><strong>Tus privilegios: </strong>{{ info.authorities}}</p>
+        </div>
+    </div>
+    <ng-template #loggedOut>
+        <div class="container">
+            No has iniciado sesión
+        </div>
+    </ng-template>
+</div> -->

@@ -1,0 +1,119 @@
+<app-menu></app-menu>
+<div class="container mb-5">
+    <div class="card">
+        <div class="card-header bg-dark text-white">
+            <button class="btn btn-primary d-inline mr-2" (click)=goB()>Atras</button><h4 class="d-inline">Orden #{{orden.idorden}}</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-dark text-white">Datos del Requerimiento</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6"><label for="">Tipo de Orden</label><br>
+                                    <h4><span class="badge mt-2"
+                                            [ngClass]="{'badge-primary': orden.tipo_orden == 'Soporte', 'badge-warning': orden.tipo_orden == 'Inspección', 'badge-info': orden.tipo_orden == 'Instalación'}">{{orden.tipo_orden}}</span>
+                                    </h4>
+                                </div>
+                                <div class="col-md-6"><label for="">Estatus</label><br>
+                                    <h4><span class="badge mt-2"
+                                            [ngClass]="{'badge-primary': orden.estatus == 'ASIGNADA', 'badge-danger': orden.estatus == 'CERRADA', 'badge-info': orden.estatus == 'EN PROCESO', 'badge-warning': orden.estatus == 'NO ASIGNADA', 'badge-dark': orden.estatus == 'ANULADA'}">{{orden.estatus}}</span>
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="">Cliente</label><input class="form-control" type="text"
+                                    [(ngModel)]="orden.nombres_cliente" readonly>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6"><label for="">Fecha programada</label>
+                                    <p><b>{{orden.fecha_asig | date:'dd/MM/yyyy'}}</b></p>
+                                </div>
+                                <div class="col-md-6"><label for="">Fecha ejecución</label>
+                                    <p><b>{{orden.fecha_ejecucion | date:'dd/MM/yyyy'}}</b></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6"><label for="">Hora de inicio</label>
+                                    <p><b>{{orden.hora_inicio}}</b></p>
+                                </div>
+                                <div class="col-md-6"><label for="">Hora de culminación</label>
+                                    <p><b>{{orden.hora_fin}}</b></p>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-12">
+                                    <label for="">Requerimiento</label><br>
+                                    <textarea class="form-control" cols="30" rows="3"
+                                        readonly>{{orden.diagnostico_inicial}}</textarea>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-12">
+                                    <label for="">Comentarios / Notas</label><br>
+                                    <textarea class="form-control" cols="30" rows="3"
+                                        readonly>{{orden.comentarios}}</textarea>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-12">
+                                    <label for="">Motivo de Suspensión</label><br>
+                                    <textarea class="form-control" cols="30" rows="3"
+                                        readonly>{{orden.motivo_susp}}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-dark text-white">Documentación Técnica</div>
+                        <div class="card-body">
+                            <label for="">Técnico Asignado</label><input class="form-control" type="text"
+                                [(ngModel)]="tecnico.nombre" readonly>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label for="">Resultados Documentados</label><br>
+                                    <textarea class="form-control" cols="30" rows="5"
+                                        readonly>{{orden.diagnostico_final}}</textarea>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label for="">Materiales Utilizados</label><br>
+                                    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                                        <table class="table table-bordered table-striped">
+                                            <tr>
+                                                <td>Material</td>
+                                                <td>Cantidad</td>
+                                            </tr>
+                                            <tr class="text-justify" *ngFor="let material of materiales">
+                                                <td>{{material.descripcion}}</td>
+                                                <td>{{material.cantidad}}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-dark text-white">
+                            Memoria Fotográfica
+                        </div>
+                        <div class="card-body">
+                            <a href="http://localhost:3000/{{photo.imagePath}}" *ngFor="let photo of photos; index as i" target="_blank"><img class="mx-2 img-thumbnail rounded" [src]="'http://localhost:3000/' + photo.imagePath" style="width: 180px; height: 200px;"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

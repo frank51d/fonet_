@@ -1,0 +1,247 @@
+<app-menu></app-menu>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        initialize();
+    });
+
+
+    // works out the X, Y position of the click inside the canvas from the X, Y position on the page
+    function getPosition(mouseEvent, sigCanvas) {
+        var x, y;
+        if (mouseEvent.pageX != undefined && mouseEvent.pageY != undefined) {
+            x = mouseEvent.pageX;
+            y = mouseEvent.pageY;
+        } else {
+            x = mouseEvent.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+            y = mouseEvent.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+        }
+
+        return { X: x - sigCanvas.offsetLeft, Y: y - sigCanvas.offsetTop };
+    }
+
+    function initialize() {
+        // get references to the canvas element as well as the 2D drawing context
+        var sigCanvas = document.getElementById("canvasSignature");
+        var context = sigCanvas.getContext("2d");
+        context.strokeStyle = 'Black';
+
+        // This will be defined on a TOUCH device such as iPad or Android, etc.
+        var is_touch_device = 'ontouchstart' in document.documentElement;
+
+        if (is_touch_device) {
+            // create a drawer which tracks touch movements
+            var drawer = {
+                isDrawing: false,
+                touchstart: function (coors) {
+                    context.beginPath();
+                    context.moveTo(coors.x, coors.y);
+                    this.isDrawing = true;
+                },
+                touchmove: function (coors) {
+                    if (this.isDrawing) {
+                        context.lineTo(coors.x, coors.y);
+                        context.stroke();
+                    }
+                },
+                touchend: function (coors) {
+                    if (this.isDrawing) {
+                        this.touchmove(coors);
+                        this.isDrawing = false;
+                    }
+                }
+            };
+
+            // create a function to pass touch events and coordinates to drawer
+            function draw(event) {
+
+                // get the touch coordinates.  Using the first touch in case of multi-touch
+                var coors = {
+                    x: event.targetTouches[0].pageX,
+                    y: event.targetTouches[0].pageY
+                };
+
+                // Now we need to get the offset of the canvas location
+                var obj = sigCanvas;
+
+                if (obj.offsetParent) {
+                    // Every time we find a new object, we add its offsetLeft and offsetTop to curleft and curtop.
+                    do {
+                        coors.x -= obj.offsetLeft;
+                        coors.y -= obj.offsetTop;
+                    }
+                    // The while loop can be "while (obj = obj.offsetParent)" only, which does return null
+                    // when null is passed back, but that creates a warning in some editors (i.e. VS2010).
+                    while ((obj = obj.offsetParent) != null);
+                }
+
+                // pass the coordinates to the appropriate handler
+                drawer[event.type](coors);
+            }
+
+
+            // attach the touchstart, touchmove, touchend event listeners.
+            sigCanvas.addEventListener('touchstart', draw, false);
+            sigCanvas.addEventListener('touchmove', draw, false);
+            sigCanvas.addEventListener('touchend', draw, false);
+
+            // prevent elastic scrolling
+            sigCanvas.addEventListener('touchmove', function (event) {
+                event.preventDefault();
+            }, false);
+        }
+        else {
+
+            // start drawing when the mousedown event fires, and attach handlers to
+            // draw a line to wherever the mouse moves to
+            $("#canvasSignature").mousedown(function (mouseEvent) {
+                var position = getPosition(mouseEvent, sigCanvas);
+
+                context.moveTo(position.X, position.Y);
+                context.beginPath();
+
+                // attach event handlers
+                $(this).mousemove(function (mouseEvent) {
+                    drawLine(mouseEvent, sigCanvas, context);
+                }).mouseup(function (mouseEvent) {
+                    finishDrawing(mouseEvent, sigCanvas, context);
+                }).mouseout(function (mouseEvent) {
+                    finishDrawing(mouseEvent, sigCanvas, context);
+                });
+            });
+
+        }
+    }
+
+    // draws a line to the x and y coordinates of the mouse event inside
+    // the specified element using the specified context
+    function drawLine(mouseEvent, sigCanvas, context) {
+
+        var position = getPosition(mouseEvent, sigCanvas);
+
+        context.lineTo(position.X, position.Y);
+        context.stroke();
+    }
+
+    // draws a line from the last coordiantes in the path to the finishing
+    // coordinates and unbind any event handlers which need to be preceded
+    // by the mouse down event
+    function finishDrawing(mouseEvent, sigCanvas, context) {
+        // draw the line to the finishing coordinates
+        drawLine(mouseEvent, sigCanvas, context);
+
+        context.closePath();
+
+        // unbind any events which could draw
+        $(sigCanvas).unbind("mousemove")
+            .unbind("mouseup")
+            .unbind("mouseout");
+    }
+</script>
+
+<div class="container mb-5">
+    <div class="container">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5 class="text-center"><b>Hora de Inicio: </b><span
+                                class="badge badge-light">{{orden.hora_inicio}}</span></h5>
+                    </div>
+                    <div class="col-md-4">
+                        <h4 class="text-center"><b>Datos de la Orden</b></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <label for=""><b>Nombres o Razón Social del Cliente</b></label>
+                <input type="text" class="form-control" id="nombre" [(ngModel)]="orden.nombres_cliente" readonly>
+                <label for="" class="mt-2"><b>PPPoE User</b></label>
+                <input type="text" class="form-control" id="nombre" [(ngModel)]="orden.ppp_user" readonly>
+                <label for="" class="mt-2"><b>PPPoE Pass</b></label>
+                <input type="text" class="form-control" id="nombre" [(ngModel)]="orden.ppp_pass" readonly>
+                <label for="" class="mt-2"><b>Requerimiento</b></label>
+                <textarea type="text" class="form-control" id="nombre" [(ngModel)]="orden.diagnostico_inicial"
+                    readonly></textarea>
+                <hr>
+                <h5 class="text-center">Documentación</h5>
+                <hr>
+                <div>
+                    <label for="" class="mt-2"><b>Diagnóstico Final</b></label>
+                    <textarea type="text" class="form-control" id="nombre" [(ngModel)]="ordenCerrada.diagnostico_final">
+                </textarea>
+                </div>
+                <hr>
+                <div class="mt-3 text-center">
+                    <label for="" class="mt-2"><b>Materiales Utilizados</b></label>
+                    <button class="btn btn-primary ml-2" data-toggle="modal" data-target="#ModalMateriales"
+                        (click)="listarMateriales()" [ngClass]="seleccion">Seleccionar</button>
+                </div>
+                <hr>
+                <div>
+                    <input type="file" class="d-none" (change)="onPhotoSelected($event)" #subirFoto multiple>
+                </div>
+                <div class="mt-3 text-center">
+                    <div>
+                        <label for="" class="my-2"><b>Memoria fotográfica</b></label>
+                        <button class="btn btn-primary ml-2" (click)="subirFoto.click()">Subir fotos</button>
+                    </div>
+                    <br>
+                    <div style="border: azure">
+                        <img *ngFor="let images of photoSelected" [src]="images || 'assets/NoImage.png'"
+                            style="width: 110px; height: 120px;" class="mx-2 mb-2 img-thumbnail rounded" alt="">
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <button class="btn btn-primary" (click)="cerrarOrden()">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal lista de materiales-->
+<div class="modal fade" id="ModalMateriales" tabindex="-1" role="dialog" aria-labelledby="ModalMaterialesTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content text-center">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalMaterialesTitle">Selecciona un Material</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                    <table class="table table-bordered table-striped">
+                        <tr class="text-justify" *ngFor="let material of materiales">
+                            <td>{{material.descripcion}} <button class="btn btn-primary float-right"
+                                    (click)="agregarMat(material.idmaterial,material.descripcion)">+</button> </td>
+                        </tr>
+                    </table>
+                </div>
+                <hr>
+                <h5>Materiales Seleccionados</h5>
+                <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                    <table class="table table-bordered table-striped">
+                        <tr class="text-center" *ngFor="let listaComplet of listaCompleta; index as i">
+                            <td>
+                                <button class="btn btn-danger m-1" (click)="quitarMat(i)">X</button>
+                            </td>
+                            <td>
+                                {{listaComplet.descripcion}} <br>
+                                <button class="btn btn-primary m-1" (click)="suma(i)">+</button>
+                                <input type="text" style="width: 55px;" [(ngModel)]="cantidad[i]">
+                                <button class="btn btn-info m-1" (click)="restar(i)">-</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer align-center">
+                <button type="button" class="btn btn-primary btn-block" data-dismiss="modal" (click)="seleccion='btn-success'">Listo!</button>
+            </div>
+        </div>
+    </div>
+</div>

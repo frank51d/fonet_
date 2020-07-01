@@ -1,0 +1,61 @@
+<app-menu></app-menu>
+<div>
+    <div class="row mx-3">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-dark text-white text-center">
+                    <h4>Filtrar</h4>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label>Técnico Asignado</label>
+                                <select class="form-control"  id="usuario" name="usuario">
+                                    
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Tipo de Orden</label>
+                                <select class="form-control" id="tipo" name="tipo">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label>Cliente</label>
+                                <input type="text" class="form-control" placeholder="Ingrese un indicativo del nombre del cliente" id="cliente" name="client">
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label>Fecha de Reporte</label>
+                                <input type="date" class="form-control" id="fecha_reporte" name="fecha_reporte">
+                            </div>
+                            <div class="col-md-6">
+                                <label>Fecha de Asignación</label>
+                                <input type="date" class="form-control" id="fecha_asig" name="fecha_asig">
+                            </div>
+                        </div>  
+                        <button class="btn btn-primary btn-block">
+                            Buscar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-dark text-white text-center">
+                    <h4>Gráfico</h4>
+                </div>
+                <div class="card-body">
+                    <div style="width: 100%; margin: auto">
+                        <canvas id="canvas2"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
